@@ -1,0 +1,11 @@
+# Article Publisher Dependencies
+
+# PDF generation for visual one-pager references
+# Note: Use version 3.6.13 for Python 3.8 compatibility
+# (ReportLab 4.x requires Python 3.9+ due to hashlib.md5 usedforsecurity parameter)
+reportlab==3.6.13
+
+# Google Docs API client (from whiteboard project)
+# google-api-python-client
+# google-auth-httplib2
+# google-auth-oauthlib

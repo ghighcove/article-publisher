@@ -1,6 +1,6 @@
 # Article Publisher
 
-Multi-format article publishing system for LinkedIn, Medium, and Google Docs. Converts markdown articles into three formats for maximum flexibility.
+Multi-format article publishing system for LinkedIn, Medium, and Google Docs. Converts markdown articles into multiple formats for maximum flexibility.
 
 ## Overview
 
@@ -9,6 +9,7 @@ This project provides a streamlined workflow for publishing technical articles:
 1. **Write once in Markdown** - Clean, version-controlled source of truth
 2. **Generate HTML** - Ready for LinkedIn article editor or Medium
 3. **Publish to Google Docs** - For sharing, review, and collaboration
+4. **Visual One-Pager PDF** (optional) - Modern, colorful quick-reference for printing/sharing
 
 The system preserves formatting (headings, bold, links, bullets) across all output formats.
 
@@ -22,6 +23,7 @@ The system preserves formatting (headings, bold, links, bullets) across all outp
 
 ### Publishing an Article
 
+**Standard publishing (HTML + Google Doc):**
 ```bash
 cd G:\ai\article-publisher
 python publish_article.py articles/claude-rate-limits/source.md "Understanding Claude API Rate Limits"
@@ -32,25 +34,36 @@ This generates:
 - ✅ **Google Doc**: URL saved to `articles/claude-rate-limits/gdoc_url.txt` (for sharing)
 - ✅ **Markdown**: `articles/claude-rate-limits/source.md` (source of truth)
 
+**With visual one-pager PDF:**
+```bash
+python publish_article.py articles/claude-rate-limits/source.md "Understanding Claude API Rate Limits" --visual
+```
+
+This adds:
+- ✅ **Visual PDF**: `articles/claude-rate-limits/visual_reference.pdf` (printable quick-reference)
+
 ## Project Structure
 
 ```
 article-publisher/
-├── publish_article.py          # Main publishing script (CLI)
-├── README.md                   # This file
-├── .auth/                      # OAuth tokens
-│   └── token.json             # Google API access token
-├── lib/                        # Local libraries
-│   ├── format_utils.py        # Markdown parser with hyperlink support
-│   └── html_generator.py      # HTML generator with LinkedIn styling
-├── articles/                   # Published articles
-│   └── claude-rate-limits/    # Example article
-│       ├── source.md          # Markdown source (canonical)
-│       ├── article.html       # HTML output
-│       └── gdoc_url.txt       # Google Doc URL
-└── templates/                  # Reusable templates
-    ├── linkedin-article.md    # Article template with guidelines
-    └── article-styles.css     # CSS template for HTML output
+├── publish_article.py             # Main publishing script (CLI)
+├── README.md                      # This file
+├── requirements.txt               # Python dependencies
+├── .auth/                         # OAuth tokens
+│   └── token.json                # Google API access token
+├── lib/                           # Local libraries
+│   ├── format_utils.py           # Markdown parser with hyperlink support
+│   ├── html_generator.py         # HTML generator with LinkedIn styling
+│   └── visual_reference_generator.py  # PDF one-pager generator
+├── articles/                      # Published articles
+│   └── claude-rate-limits/       # Example article
+│       ├── source.md             # Markdown source (canonical)
+│       ├── article.html          # HTML output
+│       ├── gdoc_url.txt          # Google Doc URL
+│       └── visual_reference.pdf  # Visual one-pager (optional)
+└── templates/                     # Reusable templates
+    ├── linkedin-article.md       # Article template with guidelines
+    └── article-styles.css        # CSS template for HTML output
 ```
 
 ## Supported Markdown Features
@@ -175,6 +188,34 @@ HTML output uses LinkedIn-inspired styling:
 - Responsive to browser width
 - Print-friendly layout
 
+### Visual One-Pager PDF
+
+The optional visual reference feature (enabled with `--visual` flag) generates a modern, colorful single-page PDF:
+
+**Content extraction:**
+- Title and subtitle from article
+- Key findings section (or bold statements from intro)
+- Major sections with condensed bullet points
+- Data points and metrics highlighted
+- Attribution footer with LinkedIn link
+
+**Design features:**
+- Modern color scheme (blues, purples, greens, oranges)
+- Rounded corners and professional typography
+- Optimized for single-page printing
+- Flexible layout adapts to article content
+
+**Use cases:**
+- Quick reference for desk/wall posting
+- Printable handout for meetings/presentations
+- Visual complement to text-heavy formats
+- Social sharing (more engaging than plain text)
+
+**Technical stack:**
+- ReportLab 3.6.13 for PDF generation (Python 3.8 compatible)
+- Intelligent content extraction from markdown
+- Dynamic layout based on article length
+
 ## Extending the System
 
 ### Adding Table Support
@@ -225,6 +266,20 @@ Ensure required packages are installed:
 pip install google-auth-oauthlib google-auth-httplib2 google-api-python-client markdown2
 ```
 
+For visual PDF generation:
+```bash
+pip install reportlab==3.6.13
+```
+
+**Note**: ReportLab 3.6.13 is required for Python 3.8 compatibility. ReportLab 4.x requires Python 3.9+ due to `hashlib.md5(usedforsecurity=False)` parameter.
+
+### Visual PDF Generation Errors
+
+If you see `'usedforsecurity' is an invalid keyword argument` error:
+```bash
+pip install reportlab==3.6.13
+```
+
 ## Examples
 
 ### Published Articles
@@ -236,11 +291,14 @@ pip install google-auth-oauthlib google-auth-httplib2 google-api-python-client m
 
 ## Future Enhancements
 
+- [x] SEO metadata generation (✅ implemented)
+- [x] Visual one-pager PDF reference (✅ implemented)
+- [x] Enhanced visual PDF: charts, diagrams, iconography (✅ implemented)
+- [ ] Advanced visual PDF v2: line charts, custom templates, user customization options
 - [ ] Table support in Google Docs
 - [ ] Image upload and embedding
 - [ ] Medium API integration
 - [ ] Article analytics tracking
-- [ ] SEO metadata generation
 - [ ] Create `/publish-article` skill
 - [ ] Automated LinkedIn posting via API
 - [ ] A/B testing for headline optimization
