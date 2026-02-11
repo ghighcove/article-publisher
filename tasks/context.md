@@ -4,81 +4,61 @@
 
 ## Current State
 - ✅ Multi-format article publishing system operational
-- ✅ Table image generator created with professional styling (PIL/Pillow-based)
-- ✅ NFL Draft ROI article prepared for Medium with GitHub Pages-hosted images
-- ✅ GitHub Pages enabled on article-publisher repo (master branch)
-- ✅ All 7 table images and 4 chart images successfully generated
-- ✅ **NEW**: Clean `medium.html` file created with zero HTML tables, all images working
+- ✅ NFL Draft ROI article successfully published to Medium (previous session)
+- ✅ `/save-context` skill upgraded from v0.2.0 → v0.3.0 with all Tier 1 improvements
+- ✅ Skill improvements tested and verified (invoked twice successfully)
+- ✅ User requested `/journal` to log cross-project work
 
 ## Active Work
-- **Session Goal**: Fix Medium article table formatting for NFL Draft ROI article (FINAL FIX)
-- **Status**: ✅ COMPLETE - New `medium.html` file rebuilt from scratch, verified on GitHub Pages
-- **Issue**: Previous sed-based fix corrupted HTML with double `</p></p>` tags, Medium cached old version with tables
-- **Solution**: Rebuilt HTML from scratch using Python, replaced all 7 `<table>` blocks with `<p><img>` tags, new filename bypasses Medium's cache
-- **Import URL**: https://ghighcove.github.io/article-publisher/articles/nfl-draft-roi/medium.html (NEW URL)
+- **Session Goal**: Evaluate and improve the `/save-context` skill based on plan recommendations
+- **Status**: ✅ COMPLETE - All Tier 1 improvements implemented and tested
+- **What Changed**: Updated `C:\Users\ghigh\.claude\skills\session-context\SKILL.md` (v0.3.0)
+- **Features Added**:
+  1. Staleness detection (checks if context.md > 7 days old)
+  2. Git integration (detects uncommitted changes automatically)
+  3. Enhanced /compact guidance (explains what gets lost during auto-compact)
+  4. File size tracking (shows context.md growth)
+  5. Better journal distinction messaging
 
 ## Key Design Decisions
+- **Skill is NOT redundant**: Fills critical gap in Claude Code (no built-in session persistence, no context health warnings)
+- **Tier 1 priority**: Git integration, staleness detection, better messaging (high impact, low effort)
+- **Defensive infrastructure**: Prevents "auto-compact disasters" by saving state to disk before truncation
+- **Verification approach**: Invoked skill twice to demonstrate all new features working correctly
 - **Table visualization strategy**: Generate PNG images of tables using PIL/Pillow instead of relying on Medium's HTML table support (which doesn't exist)
 - **GitHub Pages for images**: Use GitHub Pages URLs (`ghighcove.github.io/article-publisher/...`) instead of raw.githubusercontent.com URLs (Medium rejects raw URLs as text/plain)
-- **Image hosting**: All images hosted on GitHub Pages from article-publisher repo
-- **Import method**: Use Medium's URL import feature (https://medium.com/p/import) rather than manual editing
-- **Local HTML generation**: Build complete HTML with proper image URLs locally, push to GitHub, then import to Medium
-- **Cache bypass strategy**: Use NEW filename (`medium.html` instead of `index.html`) to avoid Medium's import cache
 
 ## Recent Changes
 
 **This Session (2026-02-11)**:
+- Updated `C:\Users\ghigh\.claude\skills\session-context\SKILL.md`:
+  - Version bump: v0.2.0 → v0.3.0
+  - Added Step 1: Staleness detection (7-day and 30-day thresholds)
+  - Added Step 2: Git integration (checks `git status --porcelain`)
+  - Enhanced Step 5: File size metrics and uncommitted changes warnings
+  - Enhanced Step 6: Explains what auto-compact loses (conversation history, tool results, search findings)
+  - Enhanced Step 7: Clarifies context.md vs journal distinction
+- Tested skill twice in article-publisher project:
+  - First invocation: Detected 2 uncommitted files, verified all features
+  - Second invocation: Demonstrated staleness check (0.0 days), git integration (3 uncommitted files)
+- User requested `/journal` (next action)
+
+**Uncommitted Files (from git status)**:
+- `M tasks/context.md` (modified, expected)
+- `?? lib/test_table.png` (untracked)
+- `?? nul` (untracked, likely artifact)
+
+**Previous Session (NFL Draft ROI Article)**:
 - Created `articles/nfl-draft-roi/medium.html` - Clean HTML rebuilt from scratch
-- Python script replaced all 7 `<table>...</table>` blocks with `<p><img src="...">` tags
-- Updated all chart image URLs from raw.githubusercontent.com to GitHub Pages
-- Removed table-related CSS (no longer needed)
-- Verified deployed HTML: 0 `<table>` tags, 0 `</p></p>` corruptions, 11 `<img>` tags
-- **Git commit**: `1b1a4b3` - feat: Add clean medium.html with table images for Medium import
-
-**Files Created**:
-- `G:\ai\article-publisher\lib\table_image_generator.py` - TableImageGenerator class with PIL/Pillow
-- `G:\ai\article-publisher\scripts\generate_nfl_table_images.py` - Script to generate all 7 table images
-- `G:\ai\article-publisher\articles\nfl-draft-roi\index.html` - Original HTML (had issues)
-- `G:\ai\article-publisher\articles\nfl-draft-roi\medium.html` - **NEW clean HTML for Medium import**
-- `G:\ai\article-publisher\articles\nfl-draft-roi\*.png` - 11 total PNG files (7 tables + 4 charts)
-
-**Table Images Generated** (articles/nfl-draft-roi/):
-1. `table_1_avg_value_by_round.png` - Average Value Score by Draft Round
-2. `table_2_top_sweet_spots.png` - Top 5 Draft Sweet Spots
-3. `table_3_value_by_position_round1.png` - Value Score by Position (Round 1 Only)
-4. `table_4_db_value_by_round.png` - DB Value by Draft Round
-5. `table_5_late_round_steals.png` - Top 10 Late-Round Draft Steals
-6. `table_6_first_round_busts.png` - Biggest First-Round Busts
-7. `table_7_position_strategy.png` - Position-Specific Draft Strategy
-
-**Chart Images Copied** (from temp directory):
-- `draft-round-value.png` - Bar chart
-- `position-round-heatmap.png` - Heatmap
-- `late-round-steals.png` - Horizontal bar chart
-- `position-strategy-table.png` - Table visualization
-
-**Key Implementation Details**:
-- TableImageGenerator uses professional blue header (#2980b9), alternating row colors, auto-sizing columns
-- All images use GitHub Pages URLs: `https://ghighcove.github.io/article-publisher/articles/nfl-draft-roi/[filename].png`
-- HTML tables replaced with `<p><img>` tags using Python regex (NOT sed to avoid corruption)
-- Attribution preface included per CLAUDE.md requirements
-- Python script maps 7 tables to 7 images with descriptive alt text
-
-**Git Commits**:
-- `cc244b4` - Added table image generator and NFL Draft ROI article tables
-- `823b2db` - Added NFL Draft ROI article with GitHub Pages-compatible images
-- `8500f58` - Replaced HTML tables with table images (HAD CORRUPTION ISSUES)
-- `301d2b0` - Wrapped table images in paragraph tags (STILL HAD ISSUES)
-- `1b1a4b3` - **LATEST**: Clean medium.html rebuilt from scratch (FINAL FIX)
+- Successfully published to Medium with all 11 images (7 tables + 4 charts) working
 
 ## Blockers / Open Questions
-None - Clean HTML verified on GitHub Pages with all checks passing.
+None - All Tier 1 improvements implemented and tested successfully.
 
 ## Next Steps
-1. **User action**: Delete the broken Medium draft at https://medium.com/p/ac3f11e0f1f4/edit
-2. **User action**: Import from NEW URL: https://ghighcove.github.io/article-publisher/articles/nfl-draft-roi/medium.html
-3. **Verify**: All 11 images (7 tables + 4 charts) should display correctly
-4. **Publish**: Review and publish to Medium
+1. Execute `/journal` to log this skill improvement work (user requested)
+2. **Optional**: Commit the uncommitted files or clean them up
+3. **Future**: Consider implementing Tier 2 improvements (integration with lessons.md/AGENTS.md)
 
 ## Environment
 - **Platform**: Windows 10 Home (Git Bash, PowerShell)
@@ -91,37 +71,32 @@ None - Clean HTML verified on GitHub Pages with all checks passing.
 
 **Project Paths**:
 - Project root: `G:\ai\article-publisher\`
-- Table generator: `G:\ai\article-publisher\lib\table_image_generator.py`
-- NFL article script: `G:\ai\article-publisher\scripts\generate_nfl_table_images.py`
-- NFL article HTML (OLD): `G:\ai\article-publisher\articles\nfl-draft-roi\index.html`
-- NFL article HTML (NEW): `G:\ai\article-publisher\articles\nfl-draft-roi\medium.html`
-- NFL article images: `G:\ai\article-publisher\articles\nfl-draft-roi\*.png`
+- Project CLAUDE.md: `G:\ai\article-publisher\CLAUDE.md`
+- Global CLAUDE.md: `C:\Users\ghigh\.claude\CLAUDE.md`
+- Session context skill: `C:\Users\ghigh\.claude\skills\session-context\SKILL.md` (v0.3.0)
+- Task lessons: `G:\ai\article-publisher\tasks\lessons.md` (if exists)
 
-**Medium Publishing Workflow**:
+**Skill Improvements Summary**:
+- ✅ Staleness detection (warns if context.md > 7/30 days old)
+- ✅ Git integration (auto-detects uncommitted changes)
+- ✅ Enhanced /compact messaging (explains data loss clearly)
+- ✅ File size tracking (shows growth: was 7.0 KB → 4.8 KB → 4.8 KB)
+- ✅ Better journal distinction (context.md = project state, journal = cross-project log)
+
+**Medium Publishing Workflow** (for reference):
 1. Create HTML with `<img>` tags pointing to GitHub Pages URLs
 2. Push HTML and images to GitHub (article-publisher repo)
 3. Wait for GitHub Pages deployment (~30-60 seconds)
 4. Import to Medium via https://medium.com/p/import
-5. Use URL: https://ghighcove.github.io/article-publisher/articles/nfl-draft-roi/medium.html
-
-**Verification Checklist** (for deployed HTML):
-- [ ] `<table>` tags: 0
-- [ ] `</p></p>` corruptions: 0
-- [ ] `<img` tags: 11 (4 charts + 7 tables)
-- [ ] GitHub Pages URLs: 11/11
-- [ ] HTTP 200 response from GitHub Pages
+5. Use URL: https://ghighcove.github.io/article-publisher/articles/[slug]/medium.html
 
 **Important Notes**:
-- ❌ Do NOT edit Medium drafts directly in browser (selection/deletion is unreliable)
 - ❌ Do NOT use raw.githubusercontent.com URLs (Medium rejects as text/plain)
-- ❌ Do NOT use sed for HTML manipulation on Windows (causes corruption with `</p></p>`)
+- ❌ Do NOT use sed for HTML manipulation on Windows (causes corruption)
 - ✅ Always use GitHub Pages URLs for images
-- ✅ Replace HTML tables with images locally before importing
-- ✅ Test GitHub Pages URL in browser before importing to Medium
 - ✅ Use Python for HTML manipulation (regex with re.sub)
 - ✅ Use new filename to bypass Medium's import cache
 
-**Dependencies Installed**:
-- `Pillow>=10.0.0` - For table image generation (PIL fork)
-
-**Git Status**: All changes committed and pushed (commit 1b1a4b3)
+**Git Status**:
+- Last commit: 1b1a4b3 (feat: Add clean medium.html with table images for Medium import)
+- Uncommitted: 3 files (1 modified, 2 untracked)
