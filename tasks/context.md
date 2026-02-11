@@ -1,136 +1,127 @@
 # Article Publisher - Session Context
 
-## Last Updated: 2026-02-10
+## Last Updated: 2026-02-11
 
 ## Current State
-- ✅ Complete multi-format article publishing system operational
-- ✅ First article published successfully in all three formats (markdown, HTML, Google Docs)
-- ✅ Project structure fully implemented with reusable templates
-- ✅ OAuth authentication configured and working with Google Docs API
+- ✅ Multi-format article publishing system operational
+- ✅ Table image generator created with professional styling (PIL/Pillow-based)
+- ✅ NFL Draft ROI article prepared for Medium with GitHub Pages-hosted images
+- ✅ GitHub Pages enabled on article-publisher repo (master branch)
+- ✅ All 7 table images and 4 chart images successfully generated
+- ✅ **NEW**: Clean `medium.html` file created with zero HTML tables, all images working
 
 ## Active Work
-- **Session Goal**: Implement plan for LinkedIn article publishing system
-- **Status**: COMPLETE - All planned components delivered
-- **Article Published**: "Understanding Claude API Rate Limits: A Practical Guide for Developers" (2,600 words)
-- **Outputs Generated**:
-  - Markdown source: `articles/claude-rate-limits/source.md`
-  - HTML: `articles/claude-rate-limits/article.html` (20KB)
-  - Google Doc: https://docs.google.com/document/d/18fBqB8t5bYicK8qnTMyTrp3T9x2LKEMnd1zsWMulUV0/edit
+- **Session Goal**: Fix Medium article table formatting for NFL Draft ROI article (FINAL FIX)
+- **Status**: ✅ COMPLETE - New `medium.html` file rebuilt from scratch, verified on GitHub Pages
+- **Issue**: Previous sed-based fix corrupted HTML with double `</p></p>` tags, Medium cached old version with tables
+- **Solution**: Rebuilt HTML from scratch using Python, replaced all 7 `<table>` blocks with `<p><img>` tags, new filename bypasses Medium's cache
+- **Import URL**: https://ghighcove.github.io/article-publisher/articles/nfl-draft-roi/medium.html (NEW URL)
 
 ## Key Design Decisions
-- **Per-model markdown parsing**: Extended `format_utils.py` to support hyperlinks via regex pattern matching `[text](url)`
-- **Shared OAuth credentials**: Reusing credentials from `C:\ai\whiteboard\.whiteboard\sync\credentials.json` with local token cache
-- **Windows compatibility**: Removed emoji characters from console output to avoid encoding errors (cp1252 limitations)
-- **Standalone HTML**: Embedded CSS in HTML files for portability (no external stylesheets)
-- **LinkedIn-optimized styling**: 740px max width, professional typography, LinkedIn blue links (#0a66c2)
-- **Two-pass formatting**: Parse markdown to clean text + directives, then apply formatting to Google Docs
-- **Attribution requirement**: All articles include attribution preface per global CLAUDE.md instructions
+- **Table visualization strategy**: Generate PNG images of tables using PIL/Pillow instead of relying on Medium's HTML table support (which doesn't exist)
+- **GitHub Pages for images**: Use GitHub Pages URLs (`ghighcove.github.io/article-publisher/...`) instead of raw.githubusercontent.com URLs (Medium rejects raw URLs as text/plain)
+- **Image hosting**: All images hosted on GitHub Pages from article-publisher repo
+- **Import method**: Use Medium's URL import feature (https://medium.com/p/import) rather than manual editing
+- **Local HTML generation**: Build complete HTML with proper image URLs locally, push to GitHub, then import to Medium
+- **Cache bypass strategy**: Use NEW filename (`medium.html` instead of `index.html`) to avoid Medium's import cache
 
 ## Recent Changes
 
+**This Session (2026-02-11)**:
+- Created `articles/nfl-draft-roi/medium.html` - Clean HTML rebuilt from scratch
+- Python script replaced all 7 `<table>...</table>` blocks with `<p><img src="...">` tags
+- Updated all chart image URLs from raw.githubusercontent.com to GitHub Pages
+- Removed table-related CSS (no longer needed)
+- Verified deployed HTML: 0 `<table>` tags, 0 `</p></p>` corruptions, 11 `<img>` tags
+- **Git commit**: `1b1a4b3` - feat: Add clean medium.html with table images for Medium import
+
 **Files Created**:
-- `G:\ai\article-publisher\publish_article.py` - Main publishing script (CLI)
-- `G:\ai\article-publisher\lib\format_utils.py` - Enhanced markdown parser with hyperlink support
-- `G:\ai\article-publisher\lib\html_generator.py` - HTML generator with LinkedIn styling
-- `G:\ai\article-publisher\articles\claude-rate-limits\source.md` - 2,600-word article on Claude rate limits
-- `G:\ai\article-publisher\articles\claude-rate-limits\article.html` - HTML output
-- `G:\ai\article-publisher\articles\claude-rate-limits\gdoc_url.txt` - Google Doc URL reference
-- `G:\ai\article-publisher\templates\linkedin-article.md` - Reusable article template
-- `G:\ai\article-publisher\templates\article-styles.css` - CSS template
-- `G:\ai\article-publisher\README.md` - Complete project documentation
+- `G:\ai\article-publisher\lib\table_image_generator.py` - TableImageGenerator class with PIL/Pillow
+- `G:\ai\article-publisher\scripts\generate_nfl_table_images.py` - Script to generate all 7 table images
+- `G:\ai\article-publisher\articles\nfl-draft-roi\index.html` - Original HTML (had issues)
+- `G:\ai\article-publisher\articles\nfl-draft-roi\medium.html` - **NEW clean HTML for Medium import**
+- `G:\ai\article-publisher\articles\nfl-draft-roi\*.png` - 11 total PNG files (7 tables + 4 charts)
 
-**Key Features Implemented**:
-- Hyperlink support in all formats (HTML, Google Docs, markdown)
-- Bold text formatting
-- Heading hierarchy (H1, H2, H3)
-- Bullet lists
-- Code block support (HTML only)
-- Attribution preface with clickable LinkedIn link
+**Table Images Generated** (articles/nfl-draft-roi/):
+1. `table_1_avg_value_by_round.png` - Average Value Score by Draft Round
+2. `table_2_top_sweet_spots.png` - Top 5 Draft Sweet Spots
+3. `table_3_value_by_position_round1.png` - Value Score by Position (Round 1 Only)
+4. `table_4_db_value_by_round.png` - DB Value by Draft Round
+5. `table_5_late_round_steals.png` - Top 10 Late-Round Draft Steals
+6. `table_6_first_round_busts.png` - Biggest First-Round Busts
+7. `table_7_position_strategy.png` - Position-Specific Draft Strategy
 
-**Dependencies Installed**:
-- `markdown2` - Markdown to HTML conversion
-- Google API packages (already installed): `google-auth-oauthlib`, `google-auth-httplib2`, `google-api-python-client`
+**Chart Images Copied** (from temp directory):
+- `draft-round-value.png` - Bar chart
+- `position-round-heatmap.png` - Heatmap
+- `late-round-steals.png` - Horizontal bar chart
+- `position-strategy-table.png` - Table visualization
+
+**Key Implementation Details**:
+- TableImageGenerator uses professional blue header (#2980b9), alternating row colors, auto-sizing columns
+- All images use GitHub Pages URLs: `https://ghighcove.github.io/article-publisher/articles/nfl-draft-roi/[filename].png`
+- HTML tables replaced with `<p><img>` tags using Python regex (NOT sed to avoid corruption)
+- Attribution preface included per CLAUDE.md requirements
+- Python script maps 7 tables to 7 images with descriptive alt text
+
+**Git Commits**:
+- `cc244b4` - Added table image generator and NFL Draft ROI article tables
+- `823b2db` - Added NFL Draft ROI article with GitHub Pages-compatible images
+- `8500f58` - Replaced HTML tables with table images (HAD CORRUPTION ISSUES)
+- `301d2b0` - Wrapped table images in paragraph tags (STILL HAD ISSUES)
+- `1b1a4b3` - **LATEST**: Clean medium.html rebuilt from scratch (FINAL FIX)
 
 ## Blockers / Open Questions
-None - project is fully functional and ready for production use.
+None - Clean HTML verified on GitHub Pages with all checks passing.
 
 ## Next Steps
-1. **Review Google Doc**: Open https://docs.google.com/document/d/18fBqB8t5bYicK8qnTMyTrp3T9x2LKEMnd1zsWMulUV0/edit and verify formatting
-2. **Preview HTML**: Open `articles/claude-rate-limits/article.html` in browser to review styling
-3. **Publish to LinkedIn**: Copy content from HTML or Google Doc into LinkedIn article editor
-4. **Version control**: Consider creating git repo for article-publisher project
-5. **Future articles**: Use `publish_article.py` workflow for additional articles
+1. **User action**: Delete the broken Medium draft at https://medium.com/p/ac3f11e0f1f4/edit
+2. **User action**: Import from NEW URL: https://ghighcove.github.io/article-publisher/articles/nfl-draft-roi/medium.html
+3. **Verify**: All 11 images (7 tables + 4 charts) should display correctly
+4. **Publish**: Review and publish to Medium
 
 ## Environment
-- **Platform**: Windows (Git Bash environment)
+- **Platform**: Windows 10 Home (Git Bash, PowerShell)
 - **Python**: 3.8 (32-bit) at E:\Python\Python38-32\
 - **Working Directory**: G:\ai\article-publisher\
-- **OAuth Credentials**: C:\ai\whiteboard\.whiteboard\sync\credentials.json
-- **OAuth Token Cache**: G:\ai\article-publisher\.auth\token.json
-- **Google APIs**: Docs API v1, Drive API v3
+- **Git Remote**: https://github.com/ghighcove/article-publisher.git (master branch)
+- **GitHub Pages**: Enabled on master branch, root directory
 
 ## Quick Reference
 
 **Project Paths**:
 - Project root: `G:\ai\article-publisher\`
-- Publishing script: `G:\ai\article-publisher\publish_article.py`
-- Libraries: `G:\ai\article-publisher\lib\`
-- Articles: `G:\ai\article-publisher\articles\`
-- Templates: `G:\ai\article-publisher\templates\`
+- Table generator: `G:\ai\article-publisher\lib\table_image_generator.py`
+- NFL article script: `G:\ai\article-publisher\scripts\generate_nfl_table_images.py`
+- NFL article HTML (OLD): `G:\ai\article-publisher\articles\nfl-draft-roi\index.html`
+- NFL article HTML (NEW): `G:\ai\article-publisher\articles\nfl-draft-roi\medium.html`
+- NFL article images: `G:\ai\article-publisher\articles\nfl-draft-roi\*.png`
 
-**External Dependencies**:
-- GoogleDocsClient: `C:\ai\whiteboard\lib\google_docs_client.py`
-- OAuth credentials: `C:\ai\whiteboard\.whiteboard\sync\credentials.json`
+**Medium Publishing Workflow**:
+1. Create HTML with `<img>` tags pointing to GitHub Pages URLs
+2. Push HTML and images to GitHub (article-publisher repo)
+3. Wait for GitHub Pages deployment (~30-60 seconds)
+4. Import to Medium via https://medium.com/p/import
+5. Use URL: https://ghighcove.github.io/article-publisher/articles/nfl-draft-roi/medium.html
 
-**Key Commands**:
-```bash
-# Publish an article
-cd G:\ai\article-publisher
-python publish_article.py articles/YOUR_ARTICLE/source.md "Article Title"
+**Verification Checklist** (for deployed HTML):
+- [ ] `<table>` tags: 0
+- [ ] `</p></p>` corruptions: 0
+- [ ] `<img` tags: 11 (4 charts + 7 tables)
+- [ ] GitHub Pages URLs: 11/11
+- [ ] HTTP 200 response from GitHub Pages
 
-# Outputs generated:
-# - articles/YOUR_ARTICLE/article.html
-# - articles/YOUR_ARTICLE/gdoc_url.txt
-# - Google Doc URL (printed to console)
-```
+**Important Notes**:
+- ❌ Do NOT edit Medium drafts directly in browser (selection/deletion is unreliable)
+- ❌ Do NOT use raw.githubusercontent.com URLs (Medium rejects as text/plain)
+- ❌ Do NOT use sed for HTML manipulation on Windows (causes corruption with `</p></p>`)
+- ✅ Always use GitHub Pages URLs for images
+- ✅ Replace HTML tables with images locally before importing
+- ✅ Test GitHub Pages URL in browser before importing to Medium
+- ✅ Use Python for HTML manipulation (regex with re.sub)
+- ✅ Use new filename to bypass Medium's import cache
 
-**Published Article**:
-- Title: "Understanding Claude API Rate Limits: A Practical Guide for Developers"
-- Length: 2,600 words (12,140 characters markdown, 11,549 characters clean text)
-- Google Doc ID: 18fBqB8t5bYicK8qnTMyTrp3T9x2LKEMnd1zsWMulUV0
-- Topics covered: Per-model rate limits, shared spend limits, prompt caching, cost optimization strategies
+**Dependencies Installed**:
+- `Pillow>=10.0.0` - For table image generation (PIL fork)
 
-**Git Status**: Not yet initialized (consider creating repo)
-
-**Supported Markdown Features**:
-- Headings: `##` (H2), `###` (H3)
-- Bold: `**text**`
-- Links: `[text](url)` - Full hyperlink support in all formats
-- Bullets: `- item`
-- Horizontal rules: `---`
-- Code blocks: ` ```code``` ` (HTML only)
-
-## Session Timeline
-1. Created project structure at `G:\ai\article-publisher\`
-2. Copied OAuth token from dev_journal project
-3. Extended `format_utils.py` to parse and format hyperlinks
-4. Created `html_generator.py` with LinkedIn-optimized styling
-5. Wrote 2,600-word article on Claude API rate limits
-6. Created `publish_article.py` multi-format publishing script
-7. Created article template and CSS template
-8. Wrote comprehensive README.md
-9. Fixed Windows encoding issues (removed emoji characters)
-10. Fixed markdown2 configuration (removed 'link-patterns' extra)
-11. Successfully published article in all three formats
-12. Verified HTML hyperlinks working correctly
-
-## Article Content Summary
-The published article explains:
-- Confusion around per-model rate limits vs shared spend limits
-- Comparison of Opus 4.6, Sonnet 4.5, Haiku 4.5 models
-- How rate limits work: separate pools per model (RPM, ITPM, OTPM)
-- Shared spend limits across all models ($100-$10K/month by tier)
-- Prompt caching as throughput multiplier (0% ITPM impact for cached tokens)
-- Cost optimization strategies (model selection, batch API, load balancing, caching)
-- Tier progression requirements and timelines
-- Practical production scenarios and solutions
+**Git Status**: All changes committed and pushed (commit 1b1a4b3)
