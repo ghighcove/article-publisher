@@ -18,6 +18,7 @@ Example:
 import sys
 import os
 import argparse
+import time
 from pathlib import Path
 
 # Add lib directory to path for imports
@@ -32,6 +33,15 @@ sys.path.insert(0, r'C:\ai\whiteboard\lib')
 from google_docs_client import GoogleDocsClient
 
 import re
+
+# Import OutcomeTracker for decision tracking
+sys.path.insert(0, "G:/ai/recursive_proj/lib")
+try:
+    from outcome_tracker import OutcomeTracker
+    TRACKING_ENABLED = True
+except Exception as e:
+    TRACKING_ENABLED = False
+    print(f"Warning: OutcomeTracker unavailable: {e}", file=sys.stderr)
 
 
 # Paths for OAuth credentials
@@ -114,6 +124,21 @@ def publish_to_google_docs(markdown_text, title):
     Returns:
         Google Docs URL
     """
+    start_time = time.time()
+    decision_id = None
+
+    # Track decision to publish to Google Docs
+    if TRACKING_ENABLED:
+        try:
+            tracker = OutcomeTracker(project_path="G:/ai/article-publisher")
+            decision_id = tracker.log_decision(
+                decision_type='api_call',
+                action_taken=f'Publishing article "{title}" to Google Docs ({len(markdown_text)} chars)',
+                rule_source='none'
+            )
+        except Exception:
+            pass  # Non-blocking
+
     # Initialize and authenticate client
     client = GoogleDocsClient(CREDENTIALS_PATH, str(TOKEN_PATH))
     client.authenticate()
@@ -158,6 +183,19 @@ def publish_to_google_docs(markdown_text, title):
 
     # Return shareable URL
     doc_url = f"https://docs.google.com/document/d/{doc_id}/edit"
+
+    # Track successful publication
+    if TRACKING_ENABLED and decision_id:
+        try:
+            tracker.record_outcome(
+                decision_id=decision_id,
+                outcome='success',
+                evidence=f'Published to Google Docs: {doc_url}',
+                time_elapsed=int(time.time() - start_time)
+            )
+        except Exception:
+            pass  # Non-blocking
+
     return doc_url
 
 
@@ -191,8 +229,35 @@ def publish_article(article_path, title, generate_visual=False):
     # 1. HTML output
     print("[HTML] Generating HTML...")
     html_path = output_dir / 'article.html'
+
+    # Track HTML generation decision
+    html_decision_id = None
+    html_start_time = time.time()
+    if TRACKING_ENABLED:
+        try:
+            tracker = OutcomeTracker(project_path="G:/ai/article-publisher")
+            html_decision_id = tracker.log_decision(
+                decision_type='file_modification',
+                action_taken=f'Generating HTML for article "{title}"',
+                rule_source='none'
+            )
+        except Exception:
+            pass  # Non-blocking
+
     save_html(markdown_text, html_path, title)
     print(f"[OK] HTML saved: {html_path}\n")
+
+    # Track HTML generation success
+    if TRACKING_ENABLED and html_decision_id:
+        try:
+            tracker.record_outcome(
+                decision_id=html_decision_id,
+                outcome='success',
+                evidence=f'HTML generated successfully: {html_path}',
+                time_elapsed=int(time.time() - html_start_time)
+            )
+        except Exception:
+            pass  # Non-blocking
 
     # 2. Google Docs output
     print("[GDOC] Publishing to Google Docs...")

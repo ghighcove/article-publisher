@@ -1,5 +1,7 @@
 # Article Publisher
 
+**Version 1.0.0**
+
 Multi-format article publishing system for LinkedIn, Medium, and Google Docs. Converts markdown articles into multiple formats for maximum flexibility.
 
 ## Overview
