@@ -18,8 +18,8 @@
 
 | ID | Item | Risk | Est | Bucket | Status | Notes |
 |----|------|------|-----|--------|--------|-------|
-| TD-01 | Review tasks/context.md for stale sections | LOW | 5 min | auto_sprint | open | Update any outdated state |
-| TD-02 | Run git log --oneline -10 and verify commit hygiene | LOW | 3 min | auto_sprint | open | Flag uncommitted work >3 days old |
+| TD-01 | Review tasks/context.md for stale sections | LOW | 5 min | auto_sprint | done | Context is 12 days stale (2026-02-11). Last commit ref updated to 7c2b092 (tech_debt init). Core content accurate. |
+| TD-02 | Run git log --oneline -10 and verify commit hygiene | LOW | 3 min | auto_sprint | done | Clean. Last commit 7c2b092 (2026-02-22, tech_debt init). No uncommitted work. |
 
 ---
 
@@ -27,8 +27,8 @@
 
 | ID | Item | Risk | Est | Bucket | Status | Notes |
 |----|------|------|-----|--------|--------|-------|
-| TD-10 | Audit CLAUDE.md for bloat (target <60 lines) | LOW | 10 min | auto_sprint | open | Run /claude-md-audit if needed |
-| TD-11 | Review tasks/lessons.md — promote patterns seen 2+ times to CLAUDE.md | LOW | 15 min | auto_sprint | open | Pattern threshold: 2+ occurrences |
+| TD-10 | Audit CLAUDE.md for bloat (target <60 lines) | LOW | 10 min | auto_sprint | done | 44 lines — HEALTHY. No action needed. |
+| TD-11 | Review tasks/lessons.md — promote patterns seen 2+ times to CLAUDE.md | LOW | 15 min | auto_sprint | done | All patterns (verify before claim, rebuild over patch, sed/Python, GitHub Pages URLs) already in CLAUDE.md. Nothing to promote. |
 
 ---
 
