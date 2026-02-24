@@ -160,7 +160,7 @@ Edit `source.md` and re-run `publish_article.py` to regenerate all formats.
 
 The system uses OAuth 2.0 for Google API access:
 
-- **Credentials**: Stored at `C:\ai\whiteboard\.whiteboard\sync\credentials.json`
+- **Credentials**: Set via `GOOGLE_CREDENTIALS_PATH` env var (default: `~/.google/credentials.json`)
 - **Token**: Cached at `.auth/token.json` (auto-refreshed)
 - **Scopes**: `docs.documents`, `drive.file`
 

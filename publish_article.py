@@ -28,8 +28,9 @@ from html_generator import save_html
 from format_utils import parse_markdown, build_formatting_requests
 from visual_reference_generator import create_visual_reference
 
-# Import GoogleDocsClient from whiteboard project
-sys.path.insert(0, r'C:\ai\whiteboard\lib')
+# Import GoogleDocsClient (install or set GOOGLE_DOCS_LIB env var)
+_gdocs_lib = os.environ.get('GOOGLE_DOCS_LIB', str(Path(__file__).parent / 'lib'))
+sys.path.insert(0, _gdocs_lib)
 from google_docs_client import GoogleDocsClient
 
 import re
@@ -45,7 +46,7 @@ except Exception as e:
 
 
 # Paths for OAuth credentials
-CREDENTIALS_PATH = r'C:\ai\whiteboard\.whiteboard\sync\credentials.json'
+CREDENTIALS_PATH = os.environ.get('GOOGLE_CREDENTIALS_PATH', str(Path.home() / '.google' / 'credentials.json'))
 TOKEN_PATH = Path(__file__).parent / '.auth' / 'token.json'
 
 
@@ -130,7 +131,7 @@ def publish_to_google_docs(markdown_text, title):
     # Track decision to publish to Google Docs
     if TRACKING_ENABLED:
         try:
-            tracker = OutcomeTracker(project_path="G:/ai/article-publisher")
+            tracker = OutcomeTracker(project_path=str(Path(__file__).parent))
             decision_id = tracker.log_decision(
                 decision_type='api_call',
                 action_taken=f'Publishing article "{title}" to Google Docs ({len(markdown_text)} chars)',
@@ -235,7 +236,7 @@ def publish_article(article_path, title, generate_visual=False):
     html_start_time = time.time()
     if TRACKING_ENABLED:
         try:
-            tracker = OutcomeTracker(project_path="G:/ai/article-publisher")
+            tracker = OutcomeTracker(project_path=str(Path(__file__).parent))
             html_decision_id = tracker.log_decision(
                 decision_type='file_modification',
                 action_taken=f'Generating HTML for article "{title}"',
