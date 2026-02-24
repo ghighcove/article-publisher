@@ -27,7 +27,7 @@ The system preserves formatting (headings, bold, links, bullets) across all outp
 
 **Standard publishing (HTML + Google Doc):**
 ```bash
-cd G:\ai\article-publisher
+cd article-publisher
 python publish_article.py articles/claude-rate-limits/source.md "Understanding Claude API Rate Limits"
 ```
 

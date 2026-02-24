@@ -34,8 +34,8 @@ from google_docs_client import GoogleDocsClient
 
 import re
 
-# Import OutcomeTracker for decision tracking
-sys.path.insert(0, "G:/ai/recursive_proj/lib")
+# Import OutcomeTracker for decision tracking (optional, local install only)
+sys.path.insert(0, str(Path(__file__).parent.parent / "recursive_proj" / "lib"))
 try:
     from outcome_tracker import OutcomeTracker
     TRACKING_ENABLED = True
